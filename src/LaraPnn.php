@@ -32,7 +32,29 @@ trait LaraPnn
     {
         $value = $prefix.$value;
 
-        return $value;
+        $format = config('larapnn.format.model');
+
+        $formatPieces = explode('-', $format);
+
+        [$pattern, $replacement] = $this->generateFormatPattern($formatPieces);
+
+        return preg_replace('#'.$pattern.'#', $replacement, $value);
+    }
+
+    protected function generateFormatPattern($pieces)
+    {
+        $pattern = '';
+        $replacement = '';
+
+        $i = 1;
+        foreach ($pieces as $piece) {
+            $pattern .= '(\d{'.strlen($piece).'})';
+            $replacement .= '$'.$i;
+            if ($i !== count($pieces)) $replacement .= config('larapnn.format.separator');
+            $i++;
+        }
+
+        return [$pattern, $replacement];
     }
 
     protected function getDialCode($value)

@@ -11,7 +11,7 @@ return [
     'format' => [
         'separator' => ' ',
 
-        'model' => 'XXX-XX-XXX'
+        'model' => 'XX-XX-XX-XX-XX'
     ],
 
     'gsm' => [
