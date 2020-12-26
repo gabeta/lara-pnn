@@ -1,9 +1,5 @@
 <?php
 
-/**
- * preg_replace('#(\d{3})(\d{3})(\d{4})#', '$1-$2-$3', $phoneNumber)
- */
-
 return [
 
     'dial_code' => ['225', '00225', '+225'],
