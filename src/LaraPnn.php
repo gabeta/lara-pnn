@@ -19,7 +19,7 @@ trait LaraPnn
         return $attribute;
     }
 
-    protected function translateToNewPnnFormat($value)
+    public function translateToNewPnnFormat($value)
     {
         $subValue = $this->getNumberValue($value);
 
@@ -80,7 +80,7 @@ trait LaraPnn
         return $value;
     }
 
-    protected function numberIsEligible($key, $value)
+    public function numberIsEligible($key, $value)
     {
         $value = $this->removeNumberSeparators($value);
 

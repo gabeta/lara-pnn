@@ -11,7 +11,7 @@ composer require gabeta/lara-pnn
 ```
 Laravel uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.
 
-#### Laravel without auto-discovery:
+##### Laravel without auto-discovery:
 If you don't use auto-discovery, add the ServiceProvider to the providers array in config/app.php
 
 ```php
@@ -20,9 +20,9 @@ Gabeta\LaraPnn\laraPnnServiceProvider::class
 
 The package was designed for the Ivorian case but if you have a similar case
 other than that of Côte d'Ivoire. This package handled it very well, you just have to publish and
-modify the package configuration file.See more options in `config/larapnn.php`
+modify the package configuration file. See more options in `config/larapnn.php`
 
-#### Copy the package config to your local config with the publish command:
+##### Copy the package config to your local config with the publish command:
 
 ```shell
 php artisan vendor:publish --provider="Gabeta\LaraPnn\laraPnnServiceProvider"
@@ -32,11 +32,12 @@ php artisan vendor:publish --provider="Gabeta\LaraPnn\laraPnnServiceProvider"
 
 #### Prepare your model
 
-So that your models can format your Ivorian numbers, the model must use the following trait:
+So that your models can format your Ivorian numbers, the model must implement the following interface and trait:
 ```php
 use Gabeta\LaraPnn\LaraPnn;
+use Gabeta\LaraPnn\LaraPnnAbstract;
 
-class YourModel extends Model
+class YourModel extends Model implements LaraPnnAbstract
 {
     use LaraPnn;
 }
@@ -57,18 +58,19 @@ class YourModel extends Model
 }
 ```
 
-##### Basic usage: Migrate without change database value
+#### Basic usage: Migrate without change database value
 You can make a basic use of it which will migrate your numbers without modifying the values ​​in the database.
 
 ```php
 
 // Before use LaraPnn trait
-$yourModel->mobile_field_name // +225 09 00 00 00 
+$yourModel->mobile_field_name // 225 09 00 00 00 
+$yourModel->fix_field_name // 225 20 30 00 00 
 
 // After use LaraPnn trait
-$yourModel->mobile_field_name // +225 07 09 00 00 00  
+$yourModel->mobile_field_name // 225 07 09 00 00 00  
+$yourModel->fix_field_name // 225 27 20 30 00 00 
 
 ```
 
-
-##### Advanced usage: Database migration
+#### Advanced usage: Database migration
