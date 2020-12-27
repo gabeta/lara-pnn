@@ -46,8 +46,9 @@ class YourModel extends Model implements LaraPnnAbstract
 Then you must define the fields concerned by the migration.
 ```php
 use Gabeta\LaraPnn\LaraPnn;
+use Gabeta\LaraPnn\LaraPnnAbstract;
 
-class YourModel extends Model
+class YourModel extends Model implements LaraPnnAbstract
 {
     use LaraPnn;
 
@@ -74,3 +75,14 @@ $yourModel->fix_field_name // 225 27 20 30 00 00
 ```
 
 #### Advanced usage: Database migration
+For a migration of numbers in the database, the one-command package allows you to migrate all your numbers from a single mode.
+
+```shell
+php artisan larapnn:migrate --model=YourModel
+```
+
+You also have a command that allows you to rollback
+
+```shell
+php artisan larapnn:rollback --model=YourModel
+```
