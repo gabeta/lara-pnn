@@ -56,3 +56,19 @@ class YourModel extends Model
     ];
 }
 ```
+
+##### Basic usage: Migrate without change database value
+You can make a basic use of it which will migrate your numbers without modifying the values ​​in the database.
+
+```php
+
+// Before use LaraPnn trait
+$yourModel->mobile_field_name // +225 09 00 00 00 
+
+// After use LaraPnn trait
+$yourModel->mobile_field_name // +225 07 09 00 00 00  
+
+```
+
+
+##### Advanced usage: Database migration
