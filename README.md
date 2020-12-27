@@ -30,3 +30,29 @@ php artisan vendor:publish --provider="Gabeta\LaraPnn\laraPnnServiceProvider"
 
 ## Usage
 
+#### Prepare your model
+
+So that your models can format your Ivorian numbers, the model must use the following trait:
+```php
+use Gabeta\LaraPnn\LaraPnn;
+
+class YourModel extends Model
+{
+    use LaraPnn;
+}
+```
+
+Then you must define the fields concerned by the migration.
+```php
+use Gabeta\LaraPnn\LaraPnn;
+
+class YourModel extends Model
+{
+    use LaraPnn;
+
+    protected $pnnFields = [
+        'mobile' => 'mobile_field_name',
+        'fix' => 'fix_field_name'
+    ];
+}
+```
