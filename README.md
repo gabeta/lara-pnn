@@ -53,8 +53,8 @@ class YourModel extends Model implements LaraPnnAbstract
     use LaraPnn;
 
     protected $pnnFields = [
-        'mobile' => 'mobile_field_name',
-        'fix' => 'fix_field_name'
+        'mobile' => ['mobile_field_name'],
+        'fix' => ['fix_field_name']
     ];
 }
 ```

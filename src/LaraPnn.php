@@ -12,7 +12,8 @@ trait LaraPnn
     {
         $attribute = parent::getAttribute($key);
 
-        if (array_key_exists($key, $this->pnnFields) && $this->numberIsEligible($key, $attribute)) {
+        if ((in_array($key, $this->pnnFields['mobile']) || in_array($key, $this->pnnFields['fix']))
+            && $this->numberIsEligible($key, $attribute)) {
            return $this->translateToNewPnnFormat($attribute);
         }
 

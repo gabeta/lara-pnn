@@ -29,9 +29,9 @@ return [
             ],
         ],
         'mtn' => [
-            'mobile_digit' => '07',
+            'mobile_digit' => '05',
 
-            'fix_digit' => '27',
+            'fix_digit' => '25',
 
             'fix' => [
                 '200', '210', '220', '230', '240', '300', '310',
@@ -45,9 +45,9 @@ return [
             ],
         ],
         'moov' => [
-            'mobile_digit' => '07',
+            'mobile_digit' => '03',
 
-            'fix_digit' => '27',
+            'fix_digit' => '21',
 
             'fix' => [
                 '208', '218', '228', '238'
