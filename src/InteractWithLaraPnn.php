@@ -25,37 +25,41 @@ trait InteractWithLaraPnn
         $this->migratePnnFromConsole = $fromConsole;
     }
 
-    public function getEligibleFields($fromConsole = false)
+    public function getEligibleFieldsForMigration($fromConsole = false)
+    {
+        return $this->getEligibleFields($fromConsole);
+    }
+
+    public function getEligibleFieldsForRollBack($fromConsole = false)
+    {
+        return $this->getEligibleFields($fromConsole, 10);
+    }
+
+    public function getEligibleFields($fromConsole = false, $digits = 8)
     {
         $this->migratePnnFromConsole = $fromConsole;
 
-       return array_merge($this->getEligibleByType('mobile'), $this->getEligibleByType('fix'));
+        return array_merge($this->getEligibleByType('mobile', $digits), $this->getEligibleByType('fix', $digits));
     }
 
-    protected function getEligibleByType($type)
+    protected function getEligibleByType($type, $digits = 8)
     {
         $fields = [];
 
         foreach ($this->pnnFields[$type] as $mobileField) {
-            if($this->numberIsEligible($mobileField, $this->{$mobileField})) $fields[] = $mobileField;
+            if($this->numberIsEligible($mobileField, $this->{$mobileField}, $digits)) $fields[] = $mobileField;
         }
 
         return $fields;
     }
 
-    public function numberIsEligible($key, $value)
+    public function numberIsEligible($key, $value, $digits = 8)
     {
-        $value = LaraPnnFacade::removeNumberSeparators($value);
-
-        return (! isset($this->pnnDialCodeFields) && strlen($value) === 8) ||
-            $this->eligibleByDialCodeField($key) || $this->eligibleByDialCode($value);
-    }
-
-    protected function eligibleByDialCode($value)
-    {
-        $dialCode = LaraPnnFacade::extractDialCode($value);
-
-        return $this->verifyByDialCode($dialCode);
+        return (
+                ! isset($this->pnnDialCodeFields)
+                || ($this->eligibleByDialCodeField($key)
+                || LaraPnnFacade::eligibleByDialCode($value))
+            ) && LaraPnnFacade::eligibleByFormat($value, $digits);
     }
 
     protected function eligibleByDialCodeField($key)
@@ -63,12 +67,7 @@ trait InteractWithLaraPnn
         return (
                 isset($this->pnnDialCodeFields) &&
                 array_key_exists($key, $this->pnnDialCodeFields) &&
-                $this->verifyByDialCode($this->{$this->pnnDialCodeFields[$key]})
+                LaraPnnFacade::verifyByDialCode($this->{$this->pnnDialCodeFields[$key]})
             );
-    }
-
-    protected function verifyByDialCode($code)
-    {
-        return in_array($code, config('larapnn.dial_code'));
     }
 }

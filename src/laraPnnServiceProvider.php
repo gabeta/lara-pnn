@@ -4,6 +4,7 @@ namespace Gabeta\LaraPnn;
 
 
 use Gabeta\LaraPnn\Console\LaraPnnMigrateCommand;
+use Gabeta\LaraPnn\Console\LaraPnnRollbackCommand;
 use Illuminate\Support\ServiceProvider;
 
 class laraPnnServiceProvider extends ServiceProvider
@@ -21,7 +22,8 @@ class laraPnnServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                LaraPnnMigrateCommand::class
+                LaraPnnMigrateCommand::class,
+                LaraPnnRollbackCommand::class
             ]);
         }
 

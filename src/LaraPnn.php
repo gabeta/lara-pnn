@@ -9,6 +9,13 @@ class LaraPnn
 {
     protected $gsmDetector = null;
 
+    public function eligibleByDialCode($value)
+    {
+        $dialCode = $this->extractDialCode($value);
+
+        return $this->verifyByDialCode($dialCode);
+    }
+
     public function translateToNewPnnFormat($value)
     {
         $subValue = $this->getNumberValue($value);
@@ -52,32 +59,41 @@ class LaraPnn
         return (is_null($this->extractDialCode($value)) ? '' : $this->extractDialCode($value).' ');
     }
 
-    public function extractDialCode($value)
+    public function extractDialCode($value, $digits = 8)
     {
         $value = $this->removeNumberSeparators($value);
 
         $length = strlen($value);
 
-        if ($length === 11) {
+        if ($length === ($digits + 3)) {
             return substr($value, 0, 3);
         }
 
-        if ($length === 12) {
+        if ($length === ($digits + 4)) {
             return substr($value, 0, 4);
         }
 
-        if ($length === 13) {
+        if ($length === ($digits + 5)) {
             return substr($value, 0, 5);
         }
 
         return null;
     }
 
-    public function getNumberValue($value)
+    public function getNumberValue($value, $digits = 8)
     {
         $value = $this->removeNumberSeparators($value);
 
-        return substr($value, -8);
+        return substr($value, -($digits));
+    }
+
+    public function eligibleByFormat($value, $digits = 8)
+    {
+        $value = $this->removeNumberSeparators($value);
+
+        $dialCode = $this->extractDialCode($value, $digits);
+
+        return (!is_null($dialCode) && $this->verifyByDialCode($dialCode)) || strlen($value) === $digits;
     }
 
     public function removeNumberSeparators($value)
@@ -138,6 +154,11 @@ class LaraPnn
         }
 
         return $gsmConfig;
+    }
+
+    public function verifyByDialCode($code)
+    {
+        return in_array($code, config('larapnn.dial_code'));
     }
 
     protected function getGsmConfig()

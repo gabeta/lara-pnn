@@ -3,9 +3,9 @@ Lara-pnn is a laravel package which allows you to format your phone number
 in the new Ivorian format (change from 8 digits to 10 digits).
 >**Note:**
 > 
->From January 31, 2021, Ivorian numbers will change to 10 digits, ARTCI has published a note to help with migration
+>From January 31, 2021, Ivorian numbers will change to 10 digits, ARTCI has published a note to help with migration.
 > 
-> This package will be useful for existing applications with an Ivorian number database. Ivory Coast Diald code: **+225**
+> This package will be useful for existing applications with an Ivorian number database. Ivory Coast Diald code is **+225**
 
 ## Installation
 Require this package with composer.
@@ -118,3 +118,5 @@ You also have a command that allows you to rollback
 ```shell
 php artisan larapnn:rollback YouModelNamepace\\YourModel
 ```
+
+#### Others usage: LaraPnn methods
