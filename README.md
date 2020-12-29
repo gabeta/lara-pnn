@@ -17,6 +17,11 @@ If you don't use auto-discovery, add the ServiceProvider to the providers array 
 ```php
 Gabeta\LaraPnn\laraPnnServiceProvider::class
 ```
+And add this to your facades in app.php:
+
+```php
+'LaraPnn' => Gabeta\LaraPnn\Facades\LaraPnn::class,
+```
 
 The package was designed for the Ivorian case but if you have a similar case
 other than that of Côte d'Ivoire. This package handled it very well, you just have to publish and
