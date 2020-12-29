@@ -6,7 +6,7 @@ namespace Gabeta\LaraPnn;
 
 interface LaraPnnAbstract
 {
-    public function translateToNewPnnFormat($value);
+    public function getEligibleFields($fromConsole = false);
 
-    public function numberIsEligible($key, $value);
+    public function setMigratePnnFromConsole($fromConsole = false);
 }

@@ -1,24 +1,13 @@
 <?php
 
+
 namespace Gabeta\LaraPnn;
 
 use Gabeta\GsmDetector\GsmDetector;
 
-trait LaraPnn
+class LaraPnn
 {
     protected $gsmDetector = null;
-
-    public function getAttribute($key)
-    {
-        $attribute = parent::getAttribute($key);
-
-        if ((in_array($key, $this->pnnFields['mobile']) || in_array($key, $this->pnnFields['fix']))
-            && $this->numberIsEligible($key, $attribute)) {
-           return $this->translateToNewPnnFormat($attribute);
-        }
-
-        return $attribute;
-    }
 
     public function translateToNewPnnFormat($value)
     {
@@ -29,7 +18,7 @@ trait LaraPnn
         return $this->getDialCode($value).$this->formattingPnn($prefix, $subValue);
     }
 
-    protected function formattingPnn($prefix, $value)
+    public function formattingPnn($prefix, $value)
     {
         $value = $prefix.$value;
 
@@ -58,38 +47,12 @@ trait LaraPnn
         return [$pattern, $replacement];
     }
 
-    protected function getDialCode($value)
+    public function getDialCode($value)
     {
         return (is_null($this->extractDialCode($value)) ? '' : $this->extractDialCode($value).' ');
     }
 
-    protected function getNumberValue($value)
-    {
-        $value = $this->removeNumberSeparators($value);
-
-        return substr($value, -8);
-    }
-
-    protected function removeNumberSeparators($value)
-    {
-        $separators = config('larapnn.separators');
-
-        foreach ($separators as $separator) {
-            $value = str_replace($separator, '', $value);
-        }
-
-        return $value;
-    }
-
-    public function numberIsEligible($key, $value)
-    {
-        $value = $this->removeNumberSeparators($value);
-
-        return (! isset($this->pnnDialCodeFields) && strlen($value) === 8) ||
-            $this->eligibleByDialCodeField($key) || $this->eligibleByDialCode($value);
-    }
-
-    protected function extractDialCode($value)
+    public function extractDialCode($value)
     {
         $value = $this->removeNumberSeparators($value);
 
@@ -110,25 +73,46 @@ trait LaraPnn
         return null;
     }
 
-    protected function eligibleByDialCode($value)
+    public function getNumberValue($value)
     {
-        $dialCode = $this->extractDialCode($value);
+        $value = $this->removeNumberSeparators($value);
 
-        return $this->verifyByDialCode($dialCode);
+        return substr($value, -8);
     }
 
-    protected function eligibleByDialCodeField($key)
+    public function removeNumberSeparators($value)
     {
-        return (
-                isset($this->pnnDialCodeFields) &&
-                array_key_exists($key, $this->pnnDialCodeFields) &&
-                $this->verifyByDialCode($this->{$this->pnnDialCodeFields[$key]})
-            );
+        $separators = config('larapnn.separators');
+
+        foreach ($separators as $separator) {
+            $value = str_replace($separator, '', $value);
+        }
+
+        return $value;
     }
 
-    protected function verifyByDialCode($code)
+    public function getNewPnnPrefix($value)
     {
-        return in_array($code, config('larapnn.dial_code'));
+        $config = $this->getGsmConfig();
+
+        $gsmName = $this->configGsmDetector()->getGsmName($value);
+
+        return $this->getPnnTelDigits($config[$gsmName], $value);
+    }
+
+    public function getPnnTelDigits($gsm, $value)
+    {
+        $gsmDetector = $this->configGsmDetector();
+
+        if ($gsmDetector->isType($value, 'fix')) {
+            return $gsm['fix_digit'];
+        }
+
+        if ($gsmDetector->isType($value, 'mobile')) {
+            return $gsm['mobile_digit'];
+        }
+
+        return null;
     }
 
     protected function configGsmDetector()
@@ -154,30 +138,6 @@ trait LaraPnn
         }
 
         return $gsmConfig;
-    }
-
-    protected function getNewPnnPrefix($value)
-    {
-        $config = $this->getGsmConfig();
-
-        $gsmName = $this->configGsmDetector()->getGsmName($value);
-
-        return $this->getPnnTelDigits($config[$gsmName], $value);
-    }
-
-    protected function getPnnTelDigits($gsm, $value)
-    {
-        $gsmDetector = $this->configGsmDetector();
-
-        if ($gsmDetector->isType($value, 'fix')) {
-            return $gsm['fix_digit'];
-        }
-
-        if ($gsmDetector->isType($value, 'mobile')) {
-            return $gsm['mobile_digit'];
-        }
-
-        return null;
     }
 
     protected function getGsmConfig()

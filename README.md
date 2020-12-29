@@ -34,23 +34,23 @@ php artisan vendor:publish --provider="Gabeta\LaraPnn\laraPnnServiceProvider"
 
 So that your models can format your Ivorian numbers, the model must implement the following interface and trait:
 ```php
-use Gabeta\LaraPnn\LaraPnn;
+use Gabeta\LaraPnn\InteractWithLaraPnn;
 use Gabeta\LaraPnn\LaraPnnAbstract;
 
 class YourModel extends Model implements LaraPnnAbstract
 {
-    use LaraPnn;
+    use InteractWithLaraPnn;
 }
 ```
 
 Then you must define the fields concerned by the migration.
 ```php
-use Gabeta\LaraPnn\LaraPnn;
+use Gabeta\LaraPnn\InteractWithLaraPnn;
 use Gabeta\LaraPnn\LaraPnnAbstract;
 
 class YourModel extends Model implements LaraPnnAbstract
 {
-    use LaraPnn;
+    use InteractWithLaraPnn;
 
     protected $pnnFields = [
         'mobile' => ['mobile_field_name'],
@@ -60,15 +60,15 @@ class YourModel extends Model implements LaraPnnAbstract
 ```
 
 We check the eligibility of the number before migration based on the dial code
-if the dialing code is in another field you must define with attribute `$pnnDialCodeFields`:
+if the dial code value is in another field you must define with attribute `$pnnDialCodeFields`:
 
 ```php
-use Gabeta\LaraPnn\LaraPnn;
+use Gabeta\LaraPnn\InteractWithLaraPnn;
 use Gabeta\LaraPnn\LaraPnnAbstract;
 
 class YourModel extends Model implements LaraPnnAbstract
 {
-    use LaraPnn;
+    use InteractWithLaraPnn;
 
     protected $pnnFields = [
         'mobile' => ['mobile_field_name'],
