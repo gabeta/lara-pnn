@@ -102,11 +102,11 @@ $yourModel->fix_field_name // 225 27 20 30 00 00
 For a migration of numbers in the database, the one-command package allows you to migrate all your numbers from a single mode.
 
 ```shell
-php artisan larapnn:migrate --model=YourModel
+php artisan larapnn:migrate YouModelNamepace\\YourModel
 ```
 
 You also have a command that allows you to rollback
 
 ```shell
-php artisan larapnn:rollback --model=YourModel
+php artisan larapnn:rollback YouModelNamepace\\YourModel
 ```
