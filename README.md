@@ -59,6 +59,30 @@ class YourModel extends Model implements LaraPnnAbstract
 }
 ```
 
+We check the eligibility of the number before migration based on the dial code
+if the dialing code is in another field you must define with attribute `$pnnDialCodeFields`:
+
+```php
+use Gabeta\LaraPnn\LaraPnn;
+use Gabeta\LaraPnn\LaraPnnAbstract;
+
+class YourModel extends Model implements LaraPnnAbstract
+{
+    use LaraPnn;
+
+    protected $pnnFields = [
+        'mobile' => ['mobile_field_name'],
+        'fix' => ['fix_field_name']
+    ];
+    
+    protected $pnnDialCodeFields = [
+        'mobile_field_name' => 'mobile_dial_code_field_name',
+        'fix_field_name' => 'fix_dial_code_field_name'
+    ];
+}
+```
+  
+
 #### Basic usage: Migrate without change database value
 You can make a basic use of it which will migrate your numbers without modifying the values ​​in the database.
 
