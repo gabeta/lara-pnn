@@ -47,7 +47,11 @@ class LaraPnn
 
         $formatPieces = explode('-', $format);
 
-        [$pattern, $replacement] = $this->generateFormatPattern($formatPieces);
+        $format = $this->generateFormatPattern($formatPieces);
+
+        $pattern = $format[0];
+
+        $replacement = $format[1];
 
         return preg_replace('#'.$pattern.'#', $replacement, $value);
     }
