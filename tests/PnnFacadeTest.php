@@ -58,7 +58,7 @@ class PnnFacadeTest extends TestCase
 
         \Config::set('larapnn.separators', [')', '(', '-', ' ']);
 
-        $this->assertEquals(LaraPnn::removeNumberSeparators('(+225) 00-00-00-00-00', 10), '2250000000000');
+        $this->assertEquals(LaraPnn::removeNumberSeparators('(+225) 00-00-00-00-00', 10), '+2250000000000');
     }
 
     public function test_get_number_value()
