@@ -13,12 +13,6 @@ php:
   - 7.3
   - 7.4
 
-jobs:
-  include:
-    - php: 5.2
-      dist: precise
-    - php: 5.3
-      dist: precise
 
 # Commands to be run before your environment runs.
 before_script:
