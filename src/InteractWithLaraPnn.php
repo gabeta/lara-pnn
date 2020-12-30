@@ -47,7 +47,9 @@ trait InteractWithLaraPnn
         $fields = [];
 
         foreach ($this->pnnFields[$type] as $mobileField) {
-            if($this->numberIsEligible($mobileField, $this->{$mobileField}, $digits)) $fields[] = $mobileField;
+            $isEligible = $this->numberIsEligible($mobileField, $this->{$mobileField}, $digits);
+
+            if($isEligible) $fields[] = $mobileField;
         }
 
         return $fields;
@@ -56,9 +58,9 @@ trait InteractWithLaraPnn
     public function numberIsEligible($key, $value, $digits = 8)
     {
         return (
-                ! isset($this->pnnDialCodeFields)
+                (!isset($this->pnnDialCodeFields["{$key}"]))
                 || ($this->eligibleByDialCodeField($key)
-                || LaraPnnFacade::eligibleByDialCode($value))
+                || LaraPnnFacade::eligibleByDialCode($value, $digits))
             ) && LaraPnnFacade::eligibleByFormat($value, $digits);
     }
 

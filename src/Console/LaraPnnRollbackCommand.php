@@ -4,6 +4,8 @@
 namespace Gabeta\LaraPnn\Console;
 
 
+use Gabeta\LaraPnn\Facades\LaraPnn;
+
 class LaraPnnRollbackCommand extends LaraPnnCommand
 {
     protected $signature = 'larapnn:rollback {model}';
@@ -17,11 +19,11 @@ class LaraPnnRollbackCommand extends LaraPnnCommand
 
     protected function changeFormat($value)
     {
-        // TODO: Implement changeFormat() method.
+        return LaraPnn::rollbackToOldFormat($value);
     }
 
     protected function successMessage()
     {
-        return $this->model->getTable()." has successful rollback";
+        return $this->model->getTable()." numbers has successful rollback";
     }
 }

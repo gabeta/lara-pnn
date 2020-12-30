@@ -7,7 +7,9 @@ return [
     'format' => [
         'separator' => ' ',
 
-        'model' => 'XX-XX-XX-XX-XX'
+        'model_migrate' => 'XX-XX-XX-XX-XX',
+
+        'model_rollback' => 'XX-XX-XX-XX'
     ],
 
     'gsm' => [
@@ -45,7 +47,7 @@ return [
             ],
         ],
         'moov' => [
-            'mobile_digit' => '03',
+            'mobile_digit' => '01',
 
             'fix_digit' => '21',
 

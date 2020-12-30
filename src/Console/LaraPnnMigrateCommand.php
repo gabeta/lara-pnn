@@ -22,6 +22,6 @@ class LaraPnnMigrateCommand extends LaraPnnCommand
 
     protected function successMessage()
     {
-        return $this->model->getTable()." has successful migrate";
+        return $this->model->getTable()." numbers has successful migrate";
     }
 }

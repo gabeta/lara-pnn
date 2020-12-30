@@ -9,9 +9,14 @@ class LaraPnn
 {
     protected $gsmDetector = null;
 
-    public function eligibleByDialCode($value)
+    /**
+     * @param $value
+     * @param int $digits
+     * @return bool
+     */
+    public function eligibleByDialCode($value, $digits = 8)
     {
-        $dialCode = $this->extractDialCode($value);
+        $dialCode = $this->extractDialCode($value, $digits);
 
         return $this->verifyByDialCode($dialCode);
     }
@@ -22,14 +27,23 @@ class LaraPnn
 
         $prefix = $this->getNewPnnPrefix($subValue);
 
-        return $this->getDialCode($value).$this->formattingPnn($prefix, $subValue);
+        return $this->getDialCode($value).$this->formattingPnn("{$prefix} {$subValue}");
     }
 
-    public function formattingPnn($prefix, $value)
+    public function rollbackToOldFormat($value)
     {
-        $value = $prefix.$value;
+        $subValue = $this->getNumberValue($value, 10);
 
-        $format = config('larapnn.format.model');
+        return $this->getDialCode($value, 10).$this->formattingPnn(substr($subValue,  2));
+    }
+
+    /**
+     * @param $value
+     * @return string|string[]|null
+     */
+    public function formattingPnn($value)
+    {
+        $format = strlen($value) === 10 ? config('larapnn.format.model_migrate') : config('larapnn.format.model_rollback');
 
         $formatPieces = explode('-', $format);
 
@@ -38,6 +52,10 @@ class LaraPnn
         return preg_replace('#'.$pattern.'#', $replacement, $value);
     }
 
+    /**
+     * @param $pieces
+     * @return array
+     */
     protected function generateFormatPattern($pieces)
     {
         $pattern = '';
@@ -54,11 +72,21 @@ class LaraPnn
         return [$pattern, $replacement];
     }
 
-    public function getDialCode($value)
+    /**
+     * @param $value
+     * @param int $digits
+     * @return string
+     */
+    public function getDialCode($value, $digits = 8)
     {
-        return (is_null($this->extractDialCode($value)) ? '' : $this->extractDialCode($value).' ');
+        return (is_null($this->extractDialCode($value, $digits)) ? '' : $this->extractDialCode($value, $digits).' ');
     }
 
+    /**
+     * @param $value
+     * @param int $digits
+     * @return false|string|null
+     */
     public function extractDialCode($value, $digits = 8)
     {
         $value = $this->removeNumberSeparators($value);
@@ -80,6 +108,20 @@ class LaraPnn
         return null;
     }
 
+    /**
+     * @param $code
+     * @return bool
+     */
+    public function verifyByDialCode($code)
+    {
+        return in_array($code, config('larapnn.dial_code'));
+    }
+
+    /**
+     * @param $value
+     * @param int $digits
+     * @return false|string
+     */
     public function getNumberValue($value, $digits = 8)
     {
         $value = $this->removeNumberSeparators($value);
@@ -87,6 +129,11 @@ class LaraPnn
         return substr($value, -($digits));
     }
 
+    /**
+     * @param $value
+     * @param int $digits
+     * @return bool
+     */
     public function eligibleByFormat($value, $digits = 8)
     {
         $value = $this->removeNumberSeparators($value);
@@ -96,6 +143,10 @@ class LaraPnn
         return (!is_null($dialCode) && $this->verifyByDialCode($dialCode)) || strlen($value) === $digits;
     }
 
+    /**
+     * @param $value
+     * @return string|string[]
+     */
     public function removeNumberSeparators($value)
     {
         $separators = config('larapnn.separators');
@@ -107,15 +158,26 @@ class LaraPnn
         return $value;
     }
 
+    /**
+     * @param $value
+     * @return mixed|string|null
+     * @throws \Gabeta\GsmDetector\Exceptions\GsmDetectorException
+     */
     public function getNewPnnPrefix($value)
     {
         $config = $this->getGsmConfig();
 
         $gsmName = $this->configGsmDetector()->getGsmName($value);
 
-        return $this->getPnnTelDigits($config[$gsmName], $value);
+        return is_null($gsmName) ? '' : $this->getPnnTelDigits($config[$gsmName], $value);
     }
 
+    /**
+     * @param $gsm
+     * @param $value
+     * @return mixed|null
+     * @throws \Gabeta\GsmDetector\Exceptions\GsmDetectorException
+     */
     public function getPnnTelDigits($gsm, $value)
     {
         $gsmDetector = $this->configGsmDetector();
@@ -131,6 +193,10 @@ class LaraPnn
         return null;
     }
 
+    /**
+     * @return GsmDetector|null
+     * @throws \Gabeta\GsmDetector\Exceptions\GsmDetectorException
+     */
     protected function configGsmDetector()
     {
         if (is_null($this->gsmDetector)) {
@@ -140,6 +206,9 @@ class LaraPnn
         return $this->gsmDetector;
     }
 
+    /**
+     * @return array
+     */
     protected function getConfigArray()
     {
         $gsmConfig = [];
@@ -156,11 +225,9 @@ class LaraPnn
         return $gsmConfig;
     }
 
-    public function verifyByDialCode($code)
-    {
-        return in_array($code, config('larapnn.dial_code'));
-    }
-
+    /**
+     * @return \Illuminate\Config\Repository|mixed
+     */
     protected function getGsmConfig()
     {
         return config('larapnn.gsm');
