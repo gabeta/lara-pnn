@@ -1,6 +1,8 @@
 # Required to run your project under the correct environment.
 language: php
 
+dist: trusty
+
 # Versions of PHP you want your project run with.
 php:
   - 5.4
