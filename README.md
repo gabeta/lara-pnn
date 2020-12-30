@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/gabeta/lara-pnn.svg?branch=main)](https://travis-ci.org/gabeta/lara-pnn)
+
 # Lara-pnn
 Lara-pnn is a laravel package which allows you to format your phone number
 in the new Ivorian format (change from 8 digits to 10 digits).
@@ -118,5 +120,3 @@ You also have a command that allows you to rollback
 ```shell
 php artisan larapnn:rollback YouModelNamepace\\YourModel
 ```
-
-#### Others usage: LaraPnn methods
