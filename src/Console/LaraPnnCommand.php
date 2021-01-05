@@ -16,11 +16,15 @@ abstract class LaraPnnCommand extends Command
     {
         $argument = $this->argument('model');
 
+        $skipAsk = $this->option('skip');
+
         $this->model = app($argument);
 
         if (! ($this->model instanceof LaraPnnAbstract)) {
             throw new \InvalidArgumentException($argument.' must implement '.LaraPnnAbstract::class);
         }
+
+        $this->line("\nRetrieval of eligible data in progess. ⌛");
 
         $queryResults = $this->model->all();
 
@@ -42,7 +46,7 @@ abstract class LaraPnnCommand extends Command
 
         $this->line("\n <options=bold,reverse;fg=green>{$this->description} | Stats for {$this->model->getTable()} table: </> \n");
         $this->line("<options=bold>Eligible row:</> {$eligibleModelsLength}");
-        $this->line("<options=bold>Eligible tel number column:</> {$eligibleModelsColumnsLength}");
+        $this->line("<options=bold>Eligible tel number column:</> {$eligibleModelsColumnsLength}\n");
 
         if (!$eligibleModels) {
 
@@ -51,22 +55,26 @@ abstract class LaraPnnCommand extends Command
             return false;
         }
 
-        $migrate = $this->ask('You do want to continues ? [yes|no]', 'yes');
+        $start = microtime(true);
 
-        if ($migrate === 'yes') {
-            $start = microtime(true);
-
+        if ($skipAsk) {
             $this->migrate($eligibleModels, $eligibleModelsColumns);
+        } else {
+            $migrate = $this->ask('You do want to continues ? [yes|no]', 'yes');
 
-            $time = number_format(microtime(true) - $start, 3);
-
-            $this->line("Execution time {$time} seconds\n");
+            if ($migrate === 'yes') {
+                $this->migrate($eligibleModels, $eligibleModelsColumns);
+            }
         }
+
+        $time = number_format(microtime(true) - $start, 3);
+
+        $this->line("Execution time {$time} seconds\n");
     }
 
     private function migrate($models, $columns)
     {
-        $this->line("Action in progress, please wait ! \n");
+        $this->line("Action in progress, please wait ! ✋\n");
 
         foreach ($columns as $column => $modelIds) {
             $this->migrateByEligibleColumn($models, $column, $modelIds);

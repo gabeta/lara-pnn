@@ -8,9 +8,9 @@ use Gabeta\LaraPnn\Facades\LaraPnn;
 
 class LaraPnnRollbackCommand extends LaraPnnCommand
 {
-    protected $signature = 'larapnn:rollback {model}';
+    protected $signature = 'larapnn:rollback {model} {--skip}';
 
-    protected $description = 'Rollback Your tel number for last plan';
+    protected $description = 'Rollback Your tel number for old plan';
 
     protected function getEligibleFields($result)
     {
