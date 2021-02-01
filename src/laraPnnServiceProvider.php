@@ -11,6 +11,8 @@ class laraPnnServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__.'/../config/larapnn.php', 'larapnn');
+
         $this->app->bind('laraPnn', function ($app) {
             return new LaraPnn();
         });
@@ -18,8 +20,6 @@ class laraPnnServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/larapnn.php', 'larapnn');
-
         if ($this->app->runningInConsole()) {
             $this->commands([
                 LaraPnnMigrateCommand::class,
