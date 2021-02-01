@@ -1,14 +1,37 @@
 <?php
 
 return [
-
+    /**
+     * When the dial code and the number are in the same field,
+     * this parameter is used to filter the Ivorian numbers.
+     */
     'dial_code' => ['225', '00225', '+225'],
 
+    /**
+     * this parameter is used to make the number in a string composed only of digits
+     * If in database your contacts were formatted with () you must add them as a parameter.
+     */
+    'separators' => [
+        ' ', '-'
+    ],
+
+    /**
+     * Formatting the number after processing
+     */
     'format' => [
+        /**
+         * Separator used after formatting
+         */
         'separator' => ' ',
 
+        /**
+         * number formatting after migration
+         */
         'model_migrate' => 'XX-XX-XX-XX-XX',
 
+        /**
+         * number formatting after migration
+         */
         'model_rollback' => 'XX-XX-XX-XX'
     ],
 
@@ -60,9 +83,5 @@ return [
                 '51', '52', '53', '70', '71', '72', '73'
             ],
         ]
-    ],
-
-    'separators' => [
-        ' ', '-'
     ],
 ];
