@@ -12,7 +12,7 @@ return [
      * If in database your contacts were formatted with () you must add them as a parameter.
      */
     'separators' => [
-        ' ', '-'
+        ' ', '-', '(', ')'
     ],
 
     /**
