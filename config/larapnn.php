@@ -9,7 +9,6 @@ return [
 
     /**
      * this parameter is used to make the number in a string composed only of digits
-     * If in database your contacts were formatted with () you must add them as a parameter.
      */
     'separators' => [
         ' ', '-', '(', ')'
