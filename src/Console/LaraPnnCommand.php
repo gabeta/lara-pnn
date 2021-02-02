@@ -42,7 +42,7 @@ abstract class LaraPnnCommand extends Command
         }
 
         $eligibleModelsLength = count($eligibleModels);
-        
+
         $eligibleModelsColumnsLength = count($eligibleModelsColumns) ? count(call_user_func_array('array_merge', $eligibleModelsColumns)) : 0;
 
         $this->line("\n <options=bold,reverse;fg=green>{$this->description} | Stats for {$this->model->getTable()} table: </> \n");
