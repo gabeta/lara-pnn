@@ -12,7 +12,9 @@ trait InteractWithLaraPnn
     {
         $attribute = parent::getAttribute($key);
 
-        if ((in_array($key, $this->pnnFields['mobile']) || in_array($key, $this->pnnFields['fix']))
+        $pnnFields = call_user_func_array('array_merge', $this->pnnFields);
+
+        if ((in_array($key, $pnnFields))
             && $this->numberIsEligible($key, $attribute) && ! $this->migratePnnFromConsole) {
            return LaraPnnFacade::translateToNewPnnFormat($attribute);
         }

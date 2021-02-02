@@ -91,7 +91,6 @@ class YourModel extends Model implements LaraPnnAbstract
     ];
 }
 ```
-  
 
 #### Basic usage: Migrate without change database value
 You can make a basic use of it which will migrate your numbers without modifying the values ​​in the database.
