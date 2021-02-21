@@ -8,7 +8,7 @@ use Gabeta\LaraPnn\Facades\LaraPnn;
 
 class LaraPnnRollbackCommand extends LaraPnnCommand
 {
-    protected $signature = 'larapnn:rollback {model} {--skip}';
+    protected $signature = 'larapnn:rollback {model} {--skip} {--take=}';
 
     protected $description = 'Rollback Your tel number for old plan';
 

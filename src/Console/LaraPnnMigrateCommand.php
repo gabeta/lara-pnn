@@ -6,7 +6,7 @@ use Gabeta\LaraPnn\Facades\LaraPnn;
 
 class LaraPnnMigrateCommand extends LaraPnnCommand
 {
-    protected $signature = 'larapnn:migrate {model} {--skip}';
+    protected $signature = 'larapnn:migrate {model} {--skip} {--take=}';
 
     protected $description = 'Migrate Your tel number for new plan';
 

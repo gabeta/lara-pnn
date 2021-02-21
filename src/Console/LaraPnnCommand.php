@@ -18,6 +18,8 @@ abstract class LaraPnnCommand extends Command
 
         $skipAsk = $this->option('skip');
 
+        $take = $this->option('take');
+
         $this->model = app($argument);
 
         if (! ($this->model instanceof LaraPnnAbstract)) {
@@ -26,7 +28,11 @@ abstract class LaraPnnCommand extends Command
 
         $this->line("\nRetrieval of eligible data in progess. ⌛");
 
-        $queryResults = $this->model->all();
+        if ($take) {
+            $queryResults = $this->model->take($take)->get();
+        } else {
+            $queryResults = $this->model->all();
+        }
 
         $eligibleModels = [];
         $eligibleModelsColumns = [];

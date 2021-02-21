@@ -120,7 +120,15 @@ You also have a command that allows you to rollback
 php artisan larapnn:rollback YouModelNamepace\\YourModel
 ```
 
-You can add the skip option to skip the stats part (used if you are using a job):
+You can add the take option to take records do you want:
+
+```shell
+php artisan larapnn:migrate YouModelNamepace\\YourModel --take=50000
+
+php artisan larapnn:rollback YouModelNamepace\\YourModel  --take=50000
+```
+
+You can add the skip option to skip the stats part (used if you are using a schedule job):
 
 ```shell
 php artisan larapnn:migrate YouModelNamepace\\YourModel --skip
